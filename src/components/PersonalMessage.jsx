@@ -34,7 +34,7 @@ export default function PersonalMessage() {
   }));
 
   return (
-    <section className="relative min-h-screen py-24 px-4 bg-gradient-to-b from-[#0a0a1a] via-[#120b2e] to-[#0a0a1a] flex flex-col justify-center items-center overflow-hidden">
+    <section className="relative min-h-screen py-24 px-4 bg-transparent flex flex-col justify-center items-center overflow-hidden">
       
       {/* Floating Balloons Layer */}
       <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
@@ -65,10 +65,10 @@ export default function PersonalMessage() {
               style={{
                 width: balloon.size,
                 height: balloon.size * 1.25,
-                backgroundColor: balloon.color,
+                backgroundImage: `radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.5) 0%, ${balloon.color} 50%, rgba(0, 0, 0, 0.3) 100%)`,
                 borderRadius: '50% 50% 50% 50% / 40% 40% 60% 60%',
-                boxShadow: 'inset -4px -4px 8px rgba(0,0,0,0.2), inset 3px 3px 6px rgba(255,255,255,0.3)',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
+                boxShadow: 'inset -4px -4px 8px rgba(0,0,0,0.25), inset 3px 3px 6px rgba(255,255,255,0.4)',
+                border: '1px solid rgba(255, 255, 255, 0.15)',
                 position: 'relative'
               }}
             >

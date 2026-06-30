@@ -1,16 +1,34 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { X, Heart } from 'lucide-react';
+import confetti from 'canvas-confetti';
 import { birthdayData } from '../config/birthdayData';
 
 export default function PhotoGallery() {
   const { photos } = birthdayData;
+  const [selectedPhoto, setSelectedPhoto] = useState(null);
+
+  const handlePhotoClick = (photo) => {
+    setSelectedPhoto(photo);
+    
+    // Blast small heart confetti upon opening the premium pop-up!
+    const heart = confetti.shapeFromText({ text: '❤️' });
+    const pinkHeart = confetti.shapeFromText({ text: '💖' });
+    confetti({
+      particleCount: 40,
+      spread: 60,
+      origin: { y: 0.6 },
+      shapes: [heart, pinkHeart],
+      scalar: 2
+    });
+  };
 
   const containerVariants = {
     hidden: { opacity: 0 },
     show: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.2
+        staggerChildren: 0.15
       }
     }
   };
@@ -42,12 +60,7 @@ export default function PhotoGallery() {
   };
 
   return (
-    <section className="relative min-h-screen py-24 px-4 bg-gradient-to-b from-[#0b081e] to-deepNavy flex flex-col justify-center items-center overflow-hidden">
-      {/* Background decoration */}
-      <div className="absolute inset-y-0 w-full z-0 pointer-events-none">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-roseGold/5 rounded-full blur-[140px]"></div>
-      </div>
-
+    <section className="relative min-h-screen py-24 px-4 bg-transparent flex flex-col justify-center items-center overflow-hidden">
       <div className="max-w-6xl w-full z-10">
         
         {/* Section Heading */}
@@ -79,28 +92,36 @@ export default function PhotoGallery() {
             <motion.div
               key={photo.id}
               variants={itemVariants}
+              onClick={() => handlePhotoClick(photo)}
               whileHover={{ 
                 y: -6,
                 boxShadow: "0 0 25px rgba(232, 160, 191, 0.35)"
               }}
-              className={`${getColSpanClass(index)} relative group overflow-hidden rounded-2xl border border-white/10 shadow-xl transition-all duration-300`}
+              className={`${getColSpanClass(index)} relative group overflow-hidden rounded-2xl border border-white/10 shadow-xl transition-all duration-300 cursor-pointer`}
             >
               {/* Outer Golden/Rose Gold Border Glow on Card Hover */}
-              <div className="absolute inset-0 border border-transparent group-hover:border-gold/30 rounded-2xl z-20 pointer-events-none transition-colors duration-300"></div>
+              <div className="absolute inset-0 border border-transparent group-hover:border-gold/30 rounded-2xl z-25 pointer-events-none transition-colors duration-300"></div>
+
+              {/* Blurred background image for elegant letterbox spacing */}
+              <img 
+                src={photo.url} 
+                alt=""
+                className="absolute inset-0 w-full h-full object-cover filter blur-xl opacity-30 scale-110 pointer-events-none z-0"
+              />
 
               {/* Photo Image */}
               <img 
                 src={photo.url} 
                 alt={photo.alt}
-                className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105 filter brightness-95 group-hover:brightness-100"
+                className="relative z-10 w-full h-full object-contain transition-transform duration-700 ease-out group-hover:scale-[1.02] filter brightness-95 group-hover:brightness-100"
                 loading="lazy"
               />
 
               {/* Gradient Dark Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-deepNavy via-transparent to-transparent opacity-60 group-hover:opacity-85 transition-opacity duration-300 z-10"></div>
+              <div className="absolute inset-0 bg-gradient-to-t from-deepNavy via-transparent to-transparent opacity-60 group-hover:opacity-85 transition-opacity duration-300 z-20"></div>
 
               {/* Caption Overlay */}
-              <div className="absolute bottom-0 left-0 right-0 p-6 z-20 transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+              <div className="absolute bottom-0 left-0 right-0 p-6 z-30 transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
                 <span className="text-xs uppercase tracking-widest text-gold font-semibold mb-1 block opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-75">
                   Memory #{photo.id}
                 </span>
@@ -112,6 +133,85 @@ export default function PhotoGallery() {
           ))}
         </motion.div>
       </div>
+
+      {/* Premium Full-Screen Love Modal */}
+      <AnimatePresence>
+        {selectedPhoto && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setSelectedPhoto(null)}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-xl p-4 md:p-8"
+          >
+            {/* Background decorative glows inside modal */}
+            <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+              <div className="absolute -top-40 -left-40 w-[400px] h-[400px] rounded-full bg-[#e8a0bf]/15 blur-[120px]"></div>
+              <div className="absolute -bottom-40 -right-40 w-[400px] h-[400px] rounded-full bg-[#ffd700]/10 blur-[120px]"></div>
+            </div>
+
+            {/* Modal Card */}
+            <motion.div
+              initial={{ scale: 0.92, y: 15, opacity: 0 }}
+              animate={{ 
+                scale: 1, 
+                y: 0, 
+                opacity: 1,
+                transition: { type: "spring", stiffness: 120, damping: 20 }
+              }}
+              exit={{ scale: 0.92, y: 15, opacity: 0 }}
+              onClick={(e) => e.stopPropagation()}
+              className="relative z-10 w-full max-w-2xl rounded-3xl glass-panel border border-white/10 p-6 md:p-10 flex flex-col items-center shadow-2xl bg-gradient-to-b from-white/[0.03] to-transparent"
+            >
+              {/* Close Button */}
+              <button
+                onClick={() => setSelectedPhoto(null)}
+                className="absolute top-4 right-4 p-2.5 rounded-full bg-white/5 border border-white/10 hover:bg-roseGold/20 hover:border-roseGold/40 text-gray-300 hover:text-white transition-all duration-300 cursor-pointer group"
+                aria-label="Close"
+              >
+                <X className="w-5 h-5 group-hover:rotate-90 transition-transform duration-300" />
+              </button>
+
+              {/* Displayed Image Frame */}
+              <div className="relative w-full max-h-[48vh] overflow-hidden rounded-2xl border border-white/5 shadow-inner mb-6 bg-[#030209]/40 flex items-center justify-center">
+                <img
+                  src={selectedPhoto.url}
+                  alt={selectedPhoto.alt}
+                  className="max-w-full max-h-[46vh] object-contain rounded-2xl select-none"
+                />
+              </div>
+
+              {/* Love Message Section */}
+              <div className="text-center flex flex-col items-center">
+                
+                {/* Heart Icon with Pulse */}
+                <motion.div
+                  animate={{ scale: [1, 1.15, 1] }}
+                  transition={{ repeat: Infinity, duration: 1.2, ease: "easeInOut" }}
+                  className="mb-2 text-roseGold drop-shadow-[0_0_10px_rgba(232,160,191,0.6)]"
+                >
+                  <Heart className="w-8 h-8 fill-roseGold text-roseGold" />
+                </motion.div>
+
+                {/* Shimmering "I LOVE YOU" */}
+                <h3 className="font-serif text-4xl md:text-6xl font-bold tracking-widest text-shimmer animate-shimmer uppercase mb-1">
+                  I Love You
+                </h3>
+                
+                {/* Recipient Subtitle */}
+                <p className="font-serif text-base md:text-xl text-gold/80 italic tracking-wider">
+                  Gafrinnisha🫶❤️
+                </p>
+                
+                {/* Selected Caption */}
+                <p className="mt-3 font-sans text-xs md:text-sm text-gray-400 font-light tracking-wide uppercase">
+                  {selectedPhoto.caption}
+                </p>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 }

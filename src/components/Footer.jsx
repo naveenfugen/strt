@@ -46,8 +46,19 @@ export default function Footer() {
       </div>
 
       {/* Footer Content */}
-      <div className="relative z-10 text-center">
+      <div className="relative z-10 text-center max-w-2xl px-4">
         
+        {/* Love Quote */}
+        <motion.p
+          initial={{ opacity: 0, y: 15 }}
+          whileInView={{ opacity: 0.85, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 1 }}
+          className="font-serif text-lg md:text-2xl italic text-transparent bg-clip-text bg-gradient-to-b from-white via-roseGold-light to-roseGold mb-8 max-w-lg mx-auto leading-relaxed select-text"
+        >
+          "If I know what love is, it is because of you."
+        </motion.p>
+
         {/* Soft Glow Text */}
         <motion.p
           initial={{ opacity: 0, y: 10 }}

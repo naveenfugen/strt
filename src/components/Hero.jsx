@@ -8,12 +8,20 @@ export default function Hero() {
   const { name, heroSubtitle } = birthdayData;
 
   useEffect(() => {
+    // Define custom emoji shapes for the premium love-themed birthday blast
+    const heart = confetti.shapeFromText({ text: '❤️' });
+    const sparkle = confetti.shapeFromText({ text: '✨' });
+    const pinkHeart = confetti.shapeFromText({ text: '💖' });
+    const themedShapes = [heart, sparkle, pinkHeart, 'circle', 'square'];
+
     // Blast 1: Center burst on mount
     confetti({
       particleCount: 140,
       spread: 80,
       origin: { y: 0.65 },
-      colors: ['#FFD700', '#E8A0BF', '#ffffff', '#B8860B', '#F5D3E3']
+      colors: ['#FFD700', '#E8A0BF', '#ffffff', '#B8860B', '#F5D3E3'],
+      shapes: themedShapes,
+      scalar: 2
     });
 
     // Blast 2: Left side burst after 700ms
@@ -23,7 +31,9 @@ export default function Hero() {
         angle: 60,
         spread: 55,
         origin: { x: 0, y: 0.8 },
-        colors: ['#FFD700', '#E8A0BF', '#ffffff']
+        colors: ['#FFD700', '#E8A0BF', '#ffffff'],
+        shapes: themedShapes,
+        scalar: 2
       });
     }, 700);
 
@@ -34,7 +44,9 @@ export default function Hero() {
         angle: 120,
         spread: 55,
         origin: { x: 1, y: 0.8 },
-        colors: ['#FFD700', '#E8A0BF', '#ffffff']
+        colors: ['#FFD700', '#E8A0BF', '#ffffff'],
+        shapes: themedShapes,
+        scalar: 2
       });
     }, 1000);
 
@@ -52,15 +64,12 @@ export default function Hero() {
   };
 
   return (
-    <section className="relative min-h-screen w-full flex flex-col justify-center items-center overflow-hidden bg-gradient-to-b from-deepNavy via-[#0f0a24] to-deepNavy px-4 select-none">
+    <section className="relative min-h-screen w-full flex flex-col justify-center items-center overflow-hidden bg-transparent px-4 select-none">
       {/* Background Starfield */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         <div className="stars-1 absolute inset-0 opacity-60"></div>
         <div className="stars-2 absolute inset-0 opacity-40"></div>
         <div className="stars-3 absolute inset-0 opacity-50"></div>
-        {/* Soft elegant radial purple glow */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full bg-roseGold/5 blur-[120px] pointer-events-none"></div>
-        <div className="absolute top-1/3 left-1/4 w-[300px] h-[300px] rounded-full bg-gold/5 blur-[100px] pointer-events-none"></div>
       </div>
 
       {/* Main Content Area */}
@@ -125,7 +134,7 @@ export default function Hero() {
           transition={{ duration: 1, delay: 0.5, ease: "easeOut" }}
           className="font-serif text-5xl md:text-8xl font-bold tracking-tight mb-4 select-text"
         >
-          <span className="text-shimmer bg-gradient-to-r from-gold via-roseGold-light to-gold">
+          <span className="text-shimmer animate-shimmer">
             Happy Birthday
           </span>
         </motion.h1>
@@ -135,7 +144,7 @@ export default function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.8, ease: "easeOut" }}
-          className="font-sans text-2xl md:text-4xl font-light text-white tracking-widest uppercase mb-6"
+          className="font-serif text-3xl md:text-6xl font-light text-white tracking-wide mb-6"
         >
           <span className="relative inline-block text-transparent bg-clip-text bg-gradient-to-r from-white via-roseGold-light to-white drop-shadow-[0_0_8px_rgba(232,160,191,0.6)]">
             {name}

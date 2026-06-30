@@ -45,13 +45,8 @@ export default function AgeMilestone() {
   return (
     <section 
       ref={containerRef}
-      className="relative min-h-screen py-24 px-4 bg-gradient-to-b from-[#0a0a1a] via-[#0e0722] to-[#0a0a1a] flex flex-col justify-center items-center overflow-hidden"
+      className="relative min-h-screen py-24 px-4 bg-transparent flex flex-col justify-center items-center overflow-hidden"
     >
-      {/* Background elements */}
-      <div className="absolute inset-0 pointer-events-none z-0">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[550px] h-[550px] bg-gold/5 rounded-full blur-[130px]"></div>
-      </div>
-
       <div className="relative z-10 flex flex-col items-center max-w-lg w-full text-center">
         
         {/* Milestone Circle and Number Container */}
